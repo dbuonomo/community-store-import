@@ -14,7 +14,7 @@ Example CSV files can be found in the examples directory.
 
 # Compatibility
 
-Tested with the following version of Community Store:
+Tested with the following versions of Community Store:
 
 * v1.3.3
 * v1.4.2
