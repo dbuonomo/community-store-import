@@ -2,11 +2,15 @@
 A concrete5 Community Store package to import products via a CSV file.
 
 # Operation
+Note: do not run this utility without first creating a backup of your concrete5 database.
+
 After install, a new dashboard menu option will be available under Store -> Products -> Import.
 
-If an import SKU already exists, the matching product data will be updated.
-Empty rows are skipped.
-Image import is not supported, but a default image can be selected prior to import.
+Example CSV files can be found in the examples directory.
+
+* If an import SKU already exists, the matching product data will be updated.
+* Empty rows are skipped.
+* Image import is not supported, but a default image can be selected prior to import.
 
 # Column Headings
 The first row of the CSV file must contain column headings. Column headings must be named as follows:
@@ -67,3 +71,12 @@ Note: Custom attributes will not be created during import. If a custom attribute
 
 # Product Groups
 Product groups can be specified by name in a column named pProductGroups. Separate each group name with a comma.  If the product group does not exist, it will be created. This field is optional.
+
+# Roadmap
+* Add a summary and confirmation before import
+* Add option to skip product updates
+* Interrogate database for non-null (required) fields
+* Allow image IDs to be specified for each product
+* Dispatch concrete5 events
+* Add support for Community Store 2.x
+
