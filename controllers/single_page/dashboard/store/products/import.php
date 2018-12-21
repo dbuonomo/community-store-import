@@ -55,8 +55,9 @@ class Import extends DashboardPageController
         $enclosure = Config::get('community_store_import.csv.enclosure');
         $line_length = Config::get('community_store_import.csv.line_length');
 
-        // Get all headings, first line
-        $headings = fgetcsv($handle, $line_length, $delim, $enclosure);
+        // Get headings
+        $csv = fgetcsv($handle, $line_length, $delim, $enclosure);
+        $headings = array_map('strtolower', $csv);
 
         if ($this->isValid($headings)) {
             $this->error->add(t("Required data missing."));
@@ -82,7 +83,7 @@ class Import extends DashboardPageController
             // Make associative arrray
             $row = array_combine($headings, $csv);
 
-            $pGroupNames = explode(',', $row['pProductGroups']);
+            $pGroupNames = explode(',', $row['pproductgroups']);
             $pGroupIDs = array();
             foreach ($pGroupNames as $pGroupName) {
                 $pgID = StoreGroup::getByName($pGroupName);
@@ -93,50 +94,50 @@ class Import extends DashboardPageController
             }
 
             $data = array(
-                'pSKU' => $row['pSKU'],
-                'pName' => trim($row['pName']),
-                'pDesc' => trim($row['pDesc']),
-                'pDetail' => trim($row['pDetail']),
-                'pPrice' => $row['pPrice'],
-                'pSalePrice' => $row['pSalePrice'],
-                'pCustomerPrice' => $row['pCustomerPrice'],   // tinyint
-                'pPriceMaximum' => $row['pPriceMaximum'],
-                'pPriceMinimum' => $row['pPriceMinimum'],
-                'pPriceSuggestions' => $row['pPriceSuggestions'],   // longtext
-                'pFeatured' => $row['pFeatured'],       // tinyint
-                'pQty' => $row['pQty'],
-                'pQtyUnlim' => $row['pQtyUnlim'],       // tinyint
-                'pBackOrder' => $row['pBackOrder'],     // tinyint
-                'pNoQty' => $row['pNoQty'],             // tinyint
-                'pTaxable' => $row['pTaxable'],         // tinyint
+                'pSKU' => $row['psku'],
+                'pName' => trim($row['pname']),
+                'pDesc' => trim($row['pdesc']),
+                'pDetail' => trim($row['pdetail']),
+                'pPrice' => $row['pprice'],
+                'pSalePrice' => $row['psaleprice'],
+                'pCustomerPrice' => $row['pcustomerprice'],
+                'pPriceMaximum' => $row['ppricemaximum'],
+                'pPriceMinimum' => $row['ppriceminimum'],
+                'pPriceSuggestions' => $row['ppricesuggestions'],
+                'pFeatured' => $row['pfeatured'],
+                'pQty' => $row['pqty'],
+                'pQtyUnlim' => $row['pqtyunlim'],
+                'pBackOrder' => $row['pbackorder'],
+                'pNoQty' => $row['pnoqty'],
+                'pTaxable' => $row['ptaxable'],
                 // @TODO: don't change product image for updates
                 'pfID' => Config::get('community_store_import.default_image'),
-                'pActive' => $row['pActive'],           // tinyint
-                'pShippable' => $row['pShippable'],     // tinyint
-                'pLength' => $row['pLength'],
-                'pWidth' => $row['pWidth'],
-                'pHeight' => $row['pHeight'],
-                'pWeight' => $row['pWeight'],
-                'pExclusive' => $row['pExclusive'],
+                'pActive' => $row['pactive'],
+                'pShippable' => $row['pshippable'],
+                'pLength' => $row['plength'],
+                'pWidth' => $row['pwidth'],
+                'pHeight' => $row['pheight'],
+                'pWeight' => $row['pweight'],
+                'pExclusive' => $row['pexclusive'],
                 'pProductGroups' => $pGroupIDs,
 
-                // CS v1.4.2
-                'pMaxQty' => $row['pMaxQty'],                       // string, not-null
-                'pQtyLabel' => $row['pQtyLabel'],                   // string, not-null
-                'pAllowDecimalQty' => $row['pAllowDecimalQty'],     // tinyint, not-null
-                'pQtySteps' => $row['pQtySteps'],
-                'pSeparateShip' => $row['pSeparateShip'],           // tinyint
+                // CS v1.4.2+
+                'pMaxQty' => $row['pmaxqty'],                       // not-null
+                'pQtyLabel' => $row['pqtylabel'],                   // not-null
+                'pAllowDecimalQty' => $row['pallowdecimalqty'],     // not-null
+                'pQtySteps' => $row['pqtysteps'],
+                'pSeparateShip' => $row['pseparateship'],
 
                 // Not imported
-                'pTaxClass' => 1,               // Default tax class
+                'pTaxClass' => 1,               // 1 = default tax class
                 'pNumberItems' => null,
-                'pCreateUserAccount' => true,   // tinyint
-                'pAutoCheckout' => false,       // tinyint
-                'pVariations' => false,         // tinyint
-                'pQuantityPrice' => false       // tinyint
+                'pCreateUserAccount' => true,
+                'pAutoCheckout' => false,
+                'pVariations' => false,
+                'pQuantityPrice' => false
             );
 
-            $p = Product::getBySKU($row['pSKU']);
+            $p = Product::getBySKU($row['psku']);
             if ($p instanceof Product) {
                 $updated++;
                 $data['pID'] = $p->getID();
