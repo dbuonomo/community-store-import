@@ -2,11 +2,13 @@
 A concrete5 Community Store package to import products via a CSV file.
 
 # Operation
+After install, a new dashboard menu option will be available under Store -> Products -> Import.
+
 If an import SKU already exists, the matching product data will be updated.
 Empty rows are skipped.
 Image import is not supported, but a default image can be selected prior to import.
 
-# Required Column Headings
+# Column Headings
 The first row of the CSV file must contain column headings. Column headings must be named as follows:
 
 ## Required
