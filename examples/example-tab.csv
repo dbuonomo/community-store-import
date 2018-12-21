@@ -1,0 +1,4 @@
+pSKU	pActive	pName	pDesc	pDetail	pLength	pWidth	pHeight	pPrice	pFeatured	pQty	pNoQty	pSalePrice	pProductGroups	attr_test1	attr_test2
+WID-1	1	Widget 1	Widget1	Widget 1	20	30	10	3.04	0	12	0		"Group1,Group2"	w1a1	w1a2
+WID-2	0	Widget 2	Widget1	Widget 2	14	30	10	3.21	0	12	0		"Group1,Group2"	w2a1	w2a2
+WID-3	1	Widget 3	Widget1	Widget 3	25	25	10	2.56	1	12	0		"Group1,Group2"	w3a1	w3a2
