@@ -10,8 +10,8 @@ Image import is not supported, but a default image can be selected prior to impo
 The first row of the CSV file must contain column headings. Column headings must be named as follows:
 
 ## Required
-Column Name | Required | Default | CS Version
------------ | -------- | ------- | ----------
+Column Name | Default | CS Version
+----------- | ------- | ----------
 pName | | 1.x+
 pCustomerPrice | | 1.x+
 pFeatured | | 1.x+
@@ -26,8 +26,8 @@ pQtyLabel | | 1.4.2+
 pAllowDecimalQty | | 1.4.2+
 
 ## Optional
-Column Name | Required | Default | CS Version
------------ | -------- | ------- | ----------
+Column Name | Default | CS Version
+----------- | ------- | ----------
 pSKU | | 1.x+
 pDesc | | 1.x+
 pDetail | | 1.x+
@@ -47,8 +47,8 @@ pQtySteps | | 1.4.2+
 pSeparateShip | | 1.4.2+
 
 ## Not supported (default values)
-Column Name | Required | Default | CS Version
------------ | -------- | ------- | ----------
+Column Name | Default | CS Version
+----------- | ------- | ----------
 pTaxClass | | 1.x+
 pNumberItems | | 1.x+
 pCreateUserAccount | | 1.x+
