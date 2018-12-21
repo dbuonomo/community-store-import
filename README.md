@@ -1,4 +1,4 @@
-# community-store-import
+# Community Store Import
 A concrete5 Community Store package to import products via a CSV file.
 
 # Operation
