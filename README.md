@@ -16,8 +16,8 @@ Example CSV files can be found in the examples directory.
 
 Tested with the following version of Community Store:
 
-*v1.3.3
-*v1.4.2
+* v1.3.3
+* v1.4.2
 
 # Column Headings
 The first row of the CSV file must contain column headings. Column headings must be named as follows:
