@@ -10,20 +10,20 @@ Image import is not supported, but a default image can be selected prior to impo
 The first row of the CSV file must contain column headings. Column headings must be named as follows:
 
 ## Required
-Column Name | Default | CS Version
------------ | ------- | ----------
-pName | | 1.x+
-pCustomerPrice | | 1.x+
-pFeatured | | 1.x+
-pQty | | 1.x+
-pNoQty | | 1.x+
-pTaxable | | 1.x+
-pActive | | 1.x+
-pShippable | | 1.x+
-pExclusive | | 1.x+
-pMaxQty | | 1.4.2+
-pQtyLabel | | 1.4.2+
-pAllowDecimalQty | | 1.4.2+
+Column Name | CS Version
+----------- | ----------
+pName | 1.x+
+pCustomerPrice | 1.x+
+pFeatured | 1.x+
+pQty | 1.x+
+pNoQty | 1.x+
+pTaxable | 1.x+
+pActive | 1.x+
+pShippable | 1.x+
+pExclusive | 1.x+
+pMaxQty | 1.4.2+
+pQtyLabel | 1.4.2+
+pAllowDecimalQty | 1.4.2+
 
 ## Optional
 Column Name | Default | CS Version
@@ -56,7 +56,7 @@ pAutoCheckout | | 1.x+
 pVariations | | 1.x+
 pQuantityPrice | | 1.x+
 
-A default value is provide for fields not imported
+A default value is provide for fields not imported.
 
 # Custom Attribute Fields
 Custom attribute field headings must have a format of ‘attr_{attribute handle}’. Example: attr_my_attribute.
