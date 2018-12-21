@@ -12,6 +12,13 @@ Example CSV files can be found in the examples directory.
 * Empty rows are skipped.
 * Image import is not supported, but a default image can be selected prior to import.
 
+# Compatibility
+
+Tested with the following version of Community Store:
+
+*v1.3.3
+*v1.4.2
+
 # Column Headings
 The first row of the CSV file must contain column headings. Column headings must be named as follows:
 
@@ -79,4 +86,5 @@ Product groups can be specified by name in a column named pProductGroups. Separa
 * Allow image IDs to be specified for each product
 * Dispatch concrete5 events
 * Add support for Community Store 2.x
+* Test with older versions of Community Store
 
