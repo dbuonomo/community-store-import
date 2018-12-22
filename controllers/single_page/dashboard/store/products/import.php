@@ -94,47 +94,51 @@ class Import extends DashboardPageController
             }
 
             $data = array(
-                'pSKU' => $row['psku'],
-                'pName' => trim($row['pname']),
-                'pDesc' => trim($row['pdesc']),
-                'pDetail' => trim($row['pdetail']),
-                'pPrice' => $row['pprice'],
-                'pSalePrice' => $row['psaleprice'],
-                'pCustomerPrice' => $row['pcustomerprice'],
-                'pPriceMaximum' => $row['ppricemaximum'],
-                'pPriceMinimum' => $row['ppriceminimum'],
-                'pPriceSuggestions' => $row['ppricesuggestions'],
-                'pFeatured' => $row['pfeatured'],
-                'pQty' => $row['pqty'],
-                'pQtyUnlim' => $row['pqtyunlim'],
-                'pBackOrder' => $row['pbackorder'],
-                'pNoQty' => $row['pnoqty'],
-                'pTaxable' => $row['ptaxable'],
-                // @TODO: don't change product image for updates
-                'pfID' => Config::get('community_store_import.default_image'),
-                'pActive' => $row['pactive'],
-                'pShippable' => $row['pshippable'],
-                'pLength' => $row['plength'],
-                'pWidth' => $row['pwidth'],
-                'pHeight' => $row['pheight'],
-                'pWeight' => $row['pweight'],
-                'pExclusive' => $row['pexclusive'],
-                'pProductGroups' => $pGroupIDs,
+                'pName' => trim($row['pname']),                 // not-null
+                'pCustomerPrice' => $row['pcustomerprice'],     // not-null
+                'pFeatured' => $row['pfeatured'],               // not-null
+                'pQty' => $row['pqty'],                         // not-null
+                'pNoQty' => $row['pnoqty'],                     // not-null
+                'pTaxable' => $row['ptaxable'],                 // not-null
+                'pActive' => $row['pactive'],                   // not-null
+                'pShippable' => $row['pshippable'],             // not-null
+                'pExclusive' => $row['pexclusive'],             // not-null
 
                 // CS v1.4.2+
                 'pMaxQty' => $row['pmaxqty'],                       // not-null
                 'pQtyLabel' => $row['pqtylabel'],                   // not-null
                 'pAllowDecimalQty' => $row['pallowdecimalqty'],     // not-null
-                'pQtySteps' => $row['pqtysteps'],
-                'pSeparateShip' => $row['pseparateship'],
 
                 // Not imported
-                'pTaxClass' => 1,               // 1 = default tax class
+                // @TODO: don't change the following fields on update
+                'pfID' => Config::get('community_store_import.default_image'),  // not-null
+                'pCreateUserAccount' => true,       // not-null
+                'pAutoCheckout' => false,           // not-null
+                'pVariations' => false,             // not-null
+                'pQuantityPrice' => false,          // not-null
+                'pTaxClass' => 1,                   // 1 = default tax class
                 'pNumberItems' => null,
-                'pCreateUserAccount' => true,
-                'pAutoCheckout' => false,
-                'pVariations' => false,
-                'pQuantityPrice' => false
+
+                'pSKU' => $row['psku'],
+                'pDesc' => trim($row['pdesc']),
+                'pDetail' => trim($row['pdetail']),
+                'pPrice' => $row['pprice'],
+                'pSalePrice' => $row['psaleprice'],
+                'pPriceMaximum' => $row['ppricemaximum'],
+                'pPriceMinimum' => $row['ppriceminimum'],
+                'pPriceSuggestions' => $row['ppricesuggestions'],
+                'pQtyUnlim' => $row['pqtyunlim'],
+                'pBackOrder' => $row['pbackorder'],
+                'pLength' => $row['plength'],
+                'pWidth' => $row['pwidth'],
+                'pHeight' => $row['pheight'],
+                'pWeight' => $row['pweight'],
+                'pProductGroups' => $pGroupIDs,
+
+                // CS v1.4.2+
+                'pQtySteps' => $row['pqtysteps'],
+                'pSeparateShip' => $row['pseparateship'],
+                'pPackageData' => $row['ppackagedata']
             );
 
             $p = Product::getBySKU($row['psku']);
@@ -197,9 +201,11 @@ class Import extends DashboardPageController
             WHERE table_schema = '$dbname'
                 AND table_name = 'CommunityStoreProducts'
                 AND is_nullable = 'NO'
-                AND column_name not in ('pID', 'pDateAdded');
+                // pfID is excluded because it is not-null but also an optional field
+                AND column_name not in ('pID', 'pfID', pDateAdded');
         */
 
         return (false);
     }
 }
+
