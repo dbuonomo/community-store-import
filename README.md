@@ -89,5 +89,4 @@ Product groups can be specified by name in a column named pProductGroups. Separa
 * Dispatch concrete5 events
 * Add support for Community Store 2.x
 * Test with older versions of Community Store
-* Provide default values for optional fields
 
