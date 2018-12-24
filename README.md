@@ -60,17 +60,17 @@ pQtySteps | | 1.4.2+
 pSeparateShip | | 1.4.2+
 pPackageData | | 1.4.2+
 
-### Not supported (default values)
+### Not supported<sup>1</sup>
 Column Name | Default | CS Version
 ----------- | ------- | ----------
-pTaxClass | | 1.x+
-pNumberItems | | 1.x+
-pCreateUserAccount | | 1.x+
-pAutoCheckout | | 1.x+
-pVariations | | 1.x+
-pQuantityPrice | | 1.x+
+pTaxClass | 1 | 1.x+
+pNumberItems | null | 1.x+
+pCreateUserAccount | true | 1.x+
+pAutoCheckout | false | 1.x+
+pVariations | false | 1.x+
+pQuantityPrice | false | 1.x+
 
-A default value is provide for fields not imported.
+[1] A default value is provide for fields not imported.
 
 ## Custom Attribute Fields
 Custom attribute field headings must have a format of ‘attr_{attribute handle}’. Example: attr_my_attribute.
