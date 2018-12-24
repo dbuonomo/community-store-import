@@ -19,6 +19,7 @@ use Concrete\Package\CommunityStore\Src\CommunityStore\Product\ProductGroup;
 class Import extends DashboardPageController
 {
     public $helpers = array('form', 'concrete/asset_library', 'json');
+    private $attributes = array();
 
     public function view()
     {
@@ -27,7 +28,7 @@ class Import extends DashboardPageController
 
     public function run()
     {
-        $this->save();
+        $this->saveSettings();
 
         $MAX_TIME = Config::get('community_store_import.max_execution_time');
         $MAX_EXECUTION_TIME = ini_get('max_execution_time');
@@ -65,10 +66,10 @@ class Import extends DashboardPageController
         }
 
         // Get attribute headings
-        $attributes = array();
+        //$attributes = array();
         foreach ($headings as $heading) {
             if (preg_match('/^attr_/', $heading)) {
-                $attributes[] = $heading;
+                $this->attributes[] = $heading;
             }
         }
 
@@ -83,85 +84,15 @@ class Import extends DashboardPageController
             // Make associative arrray
             $row = array_combine($headings, $csv);
 
-            $pGroupNames = explode(',', $row['pproductgroups']);
-            $pGroupIDs = array();
-            foreach ($pGroupNames as $pGroupName) {
-                $pgID = StoreGroup::getByName($pGroupName);
-                if (!$pgID instanceof StoreGroup) {
-                    $pgID = StoreGroup::add($pGroupName);
-                }
-                $pGroupIDs[] = $pgID;
-            }
-
-            $data = array(
-                'pName' => trim($row['pname']),                 // not-null
-                'pCustomerPrice' => $row['pcustomerprice'],     // not-null
-                'pFeatured' => $row['pfeatured'],               // not-null
-                'pQty' => $row['pqty'],                         // not-null
-                'pNoQty' => $row['pnoqty'],                     // not-null
-                'pTaxable' => $row['ptaxable'],                 // not-null
-                'pActive' => $row['pactive'],                   // not-null
-                'pShippable' => $row['pshippable'],             // not-null
-                'pExclusive' => $row['pexclusive'],             // not-null
-
-                // CS v1.4.2+
-                'pMaxQty' => $row['pmaxqty'],                       // not-null
-                'pQtyLabel' => $row['pqtylabel'],                   // not-null
-                'pAllowDecimalQty' => $row['pallowdecimalqty'],     // not-null
-
-                // Not imported
-                // @TODO: don't change the following fields on update
-                'pfID' => Config::get('community_store_import.default_image'),  // not-null
-                'pCreateUserAccount' => true,       // not-null
-                'pAutoCheckout' => false,           // not-null
-                'pVariations' => false,             // not-null
-                'pQuantityPrice' => false,          // not-null
-                'pTaxClass' => 1,                   // 1 = default tax class
-                'pNumberItems' => null,
-
-                'pSKU' => $row['psku'],
-                'pDesc' => trim($row['pdesc']),
-                'pDetail' => trim($row['pdetail']),
-                'pPrice' => $row['pprice'],
-                'pSalePrice' => $row['psaleprice'],
-                'pPriceMaximum' => $row['ppricemaximum'],
-                'pPriceMinimum' => $row['ppriceminimum'],
-                'pPriceSuggestions' => $row['ppricesuggestions'],
-                'pQtyUnlim' => $row['pqtyunlim'],
-                'pBackOrder' => $row['pbackorder'],
-                'pLength' => $row['plength'],
-                'pWidth' => $row['pwidth'],
-                'pHeight' => $row['pheight'],
-                'pWeight' => $row['pweight'],
-                'pProductGroups' => $pGroupIDs,
-
-                // CS v1.4.2+
-                'pQtySteps' => $row['pqtysteps'],
-                'pSeparateShip' => $row['pseparateship'],
-                'pPackageData' => $row['ppackagedata']
-            );
-
             $p = Product::getBySKU($row['psku']);
+            
             if ($p instanceof Product) {
+                $this->update($p, $row);
                 $updated++;
-                $data['pID'] = $p->getID();
             } else {
+                $p = $this->add($row);
                 $added++;
             }
-
-            // Add product
-            $p = Product::saveProduct($data);
-
-            // Add product attributes
-            foreach ($attributes as $attr) {
-                $ak = preg_replace('/^attr_/', '', $attr);
-                if (StoreProductKey::getByHandle($ak)) {
-                    $p->setAttribute($ak, $row[$attr]);
-                }
-            }
-
-            // Add groups
-            ProductGroup::addGroupsForProduct($data, $p);
 
             // @TODO: dispatch events - see Products::save()
         }
@@ -174,7 +105,145 @@ class Import extends DashboardPageController
         ini_set('max_input_time', $MAX_INPUT_TIME);
     }
 
-    public function save()
+    private function add($row)
+    {
+        $data = array(
+            'pSKU' => $row['psku'],
+            'pName' => $row['pname'],                       // not-null
+            'pDesc' => trim($row['pdesc']),
+            'pDetail' => trim($row['pdetail']),
+            'pCustomerPrice' => $row['pcustomerprice'],     // not-null
+            'pFeatured' => $row['pfeatured'],               // not-null
+            'pQty' => $row['pqty'],                         // not-null
+            'pNoQty' => $row['pnoqty'],                     // not-null
+            'pTaxable' => $row['ptaxable'],                 // not-null
+            'pActive' => $row['pactive'],                   // not-null
+            'pShippable' => $row['pshippable'],             // not-null
+            'pExclusive' => $row['pexclusive'],             // not-null
+
+            'pPrice' => $row['pprice'],
+            'pSalePrice' => $row['psaleprice'],
+            'pPriceMaximum' => $row['ppricemaximum'],
+            'pPriceMinimum' => $row['ppriceminimum'],
+            'pPriceSuggestions' => $row['ppricesuggestions'],
+            'pQtyUnlim' => $row['pqtyunlim'],
+            'pBackOrder' => $row['pbackorder'],
+            'pLength' => $row['plength'],
+            'pWidth' => $row['pwidth'],
+            'pHeight' => $row['pheight'],
+            'pWeight' => $row['pweight'],
+
+            // CS v1.4.2+
+            'pMaxQty' => $row['pmaxqty'],                       // not-null
+            'pQtyLabel' => $row['pqtylabel'],                   // not-null
+            'pAllowDecimalQty' => $row['pallowdecimalqty'],     // not-null
+            'pQtySteps' => $row['pqtysteps'],
+            'pSeperateShip' => $row['pseperateship'],
+            'pPackageData' => $row['ppackagedata'],
+
+            // Not imported
+            'pfID' => Config::get('community_store_import.default_image'),  // not-null
+            'pCreateUserAccount' => true,       // not-null
+            'pAutoCheckout' => false,           // not-null
+            'pVariations' => false,             // not-null
+            'pQuantityPrice' => false,          // not-null
+            'pTaxClass' => 1,                   // 1 = default tax class
+            'pNumberItems' => null
+        );
+
+        // Save product
+        $p = Product::saveProduct($data);
+
+        // Add product attributes
+        foreach ($this->attributes as $attr) {
+            $ak = preg_replace('/^attr_/', '', $attr);
+            if (StoreProductKey::getByHandle($ak)) {
+                $p->setAttribute($ak, $row[$attr]);
+            }
+        }
+        
+        $pGroupNames = explode(',', $row['pproductgroups']);
+        $pGroupIDs = array();
+        foreach ($pGroupNames as $pGroupName) {
+            $pgID = StoreGroup::getByName($pGroupName);
+            if (!$pgID instanceof StoreGroup) {
+                $pgID = StoreGroup::add($pGroupName);
+            }
+            $pGroupIDs[] = $pgID;
+        }
+        $data['pProductGroups'] = $pGroupIDs;
+
+        // Add groups
+        ProductGroup::addGroupsForProduct($data, $p);
+
+        return $p;
+    }
+
+    private function update($p, $row)
+    {
+        if ($row['psku']) $p->setSKU($row['psku']);
+        if ($row['pname']) $p->setName($row['pname']);
+        if ($row['pdesc']) $p->setDescription($row['pdesc']);
+        if ($row['pdetail']) $p->setDetail($row['pdetail']);
+        if ($row['pfeatured']) $p->setIsFeatured($row['pfeatured']);
+        if ($row['pqty']) $p->setQty($row['pqty']);
+        if ($row['pnoqty']) $p->setNoQty($row['pnoqty']);
+        if ($row['ptaxable']) $p->setISTaxable($row['ptaxable']);
+        if ($row['pactive']) $p->setIsActive($row['pqctive']);
+        if ($row['pshippable']) $p->setIsShippable($row['pshippable']);
+        if ($row['pexclusive']) $p->setIsExclusive($row['pexclusive']);
+
+        if ($row['pprice']) $p->setPrice($row['pprice']);
+        if ($row['psaleprice']) $p->setSalePrice($row['psaleprice']);
+        if ($row['ppricemaximum']) $p->setPriceMaximum($row['ppricemaximum']);
+        if ($row['ppriceminimum']) $p->setPriceMinimum($row['ppriceminimum']);
+        if ($row['ppricesuggestions']) $p->setPriceSuggestions($row['ppricesuggestions']);
+        if ($row['pqtyunlim']) $p->setIsUnlimited($row['pqtyunlim']);
+        if ($row['pbackorder']) $p->setAllowBackOrder($row['pbackorder']);
+        if ($row['plength']) $p->setLength($row['plength']);
+        if ($row['pwidth']) $p->setWidth($row['pwidth']);
+        if ($row['pheight']) $p->setHeight($row['pheight']);
+        if ($row['pweight']) $p->setWeight($row['pweight']);
+        
+        // CS v1.4.2+
+        if ($row['pmaxqty']) $p->setMaxQty($row['pmaxqty']);
+        if ($row['pqtylabel']) $p->setQtyLabel($row['pqtylabel']);
+        if ($row['pallowdecimalqty']) $p->setAllowDecimalQty($row['pallowdecimalqty']);
+        if ($row['pqtysteps']) $p->setQtySteps($row['pqtysteps']);
+        if ($row['pseparateship']) $p->setSeparateShip($row['pseparateship']);
+        if ($row['ppackagedata']) $p->setPackageData($row['ppackagedata']);
+
+        // Product attributes
+        foreach ($this->attributes as $attr) {
+            $ak = preg_replace('/^attr_/', '', $attr);
+            if (StoreProductKey::getByHandle($ak)) {
+                $p->setAttribute($ak, $row[$attr]);
+            }
+        }
+
+        // Product groups
+        if ($row['pproductgroups']) {
+            $pGroupNames = explode(',', $row['pproductgroups']);
+            $pGroupIDs = array();
+            foreach ($pGroupNames as $pGroupName) {
+                $pgID = StoreGroup::getByName($pGroupName);
+                if (!$pgID instanceof StoreGroup) {
+                    $pgID = StoreGroup::add($pGroupName);
+                }
+                $pGroupIDs[] = $pgID;
+            }
+            $data['pProductGroups'] = $pGroupIDs;
+
+            // Update groups
+            ProductGroup::addGroupsForProduct($data, $p);
+        }
+
+        $p = $p->save();
+
+        return $p;
+    }
+   
+    private function saveSettings()
     {
         $data = $this->post();
 

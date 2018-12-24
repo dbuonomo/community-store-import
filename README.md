@@ -10,7 +10,7 @@ Example CSV files can be found in the examples directory.
 
 * If an import SKU already exists, the matching product data will be updated.
 * Empty rows are skipped.
-* Image import is not supported, but a default image can be selected prior to import.
+* Image import is not supported, however a default image can be selected prior to import.
 
 ## Compatibility
 
@@ -20,7 +20,7 @@ Tested with the following versions of Community Store:
 * v1.4.2
 
 ## Column Headings
-The first row of the CSV file must contain column headings. Column headings must be named as follows:
+The first row of the CSV file must contain column headings as defined below. Columns headings that do not match any of the prescribed column names will be ignored.
 
 ### Required
 Column Name | CS Version
