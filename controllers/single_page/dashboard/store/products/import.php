@@ -143,7 +143,7 @@ class Import extends DashboardPageController
 
             // Not imported
             'pfID' => Config::get('community_store_import.default_image'),  // not-null
-            'pCreateUserAccount' => true,       // not-null
+            'pCreateUserAccount' => false,       // not-null
             'pAutoCheckout' => false,           // not-null
             'pVariations' => false,             // not-null
             'pQuantityPrice' => false,          // not-null
