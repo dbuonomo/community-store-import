@@ -66,7 +66,6 @@ class Import extends DashboardPageController
         }
 
         // Get attribute headings
-        //$attributes = array();
         foreach ($headings as $heading) {
             if (preg_match('/^attr_/', $heading)) {
                 $this->attributes[] = $heading;
