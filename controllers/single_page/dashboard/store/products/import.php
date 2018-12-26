@@ -118,6 +118,8 @@ class Import extends DashboardPageController
             'pTaxable' => $row['ptaxable'],                 // not-null
             'pActive' => $row['pactive'],                   // not-null
             'pShippable' => $row['pshippable'],             // not-null
+            'pCreateUserAccount' => $row['pcreateuseraccount'],      // not-null
+            'pAutoCheckout' => $row['pautocheckout'],       // not-null
             'pExclusive' => $row['pexclusive'],             // not-null
 
             'pPrice' => $row['pprice'],
@@ -131,6 +133,7 @@ class Import extends DashboardPageController
             'pWidth' => $row['pwidth'],
             'pHeight' => $row['pheight'],
             'pWeight' => $row['pweight'],
+            'pNumberItems' => $row['pnumberitems'],
 
             // CS v1.4.2+
             'pMaxQty' => $row['pmaxqty'],                       // not-null
@@ -140,14 +143,11 @@ class Import extends DashboardPageController
             'pSeperateShip' => $row['pseperateship'],
             'pPackageData' => $row['ppackagedata'],
 
-            // Not imported
+            // Not supported in CSV data
             'pfID' => Config::get('community_store_import.default_image'),  // not-null
-            'pCreateUserAccount' => false,       // not-null
-            'pAutoCheckout' => false,           // not-null
             'pVariations' => false,             // not-null
             'pQuantityPrice' => false,          // not-null
-            'pTaxClass' => 1,                   // 1 = default tax class
-            'pNumberItems' => null
+            'pTaxClass' => 1                    // 1 = default tax class
         );
 
         // Save product
@@ -190,6 +190,8 @@ class Import extends DashboardPageController
         if ($row['ptaxable']) $p->setISTaxable($row['ptaxable']);
         if ($row['pactive']) $p->setIsActive($row['pqctive']);
         if ($row['pshippable']) $p->setIsShippable($row['pshippable']);
+        if ($row['pcreateuseraccount']) $p->setCreatesUserAccount($row['pcreateuseraccount']);
+        if ($row['pautocheckout']) $p->setAutoCheckout($row['pautocheckout']);
         if ($row['pexclusive']) $p->setIsExclusive($row['pexclusive']);
 
         if ($row['pprice']) $p->setPrice($row['pprice']);
@@ -203,6 +205,7 @@ class Import extends DashboardPageController
         if ($row['pwidth']) $p->setWidth($row['pwidth']);
         if ($row['pheight']) $p->setHeight($row['pheight']);
         if ($row['pweight']) $p->setWeight($row['pweight']);
+        if ($row['pnumberitems']) $p->setNumberItems($row['pnumberitems']);
         
         // CS v1.4.2+
         if ($row['pmaxqty']) $p->setMaxQty($row['pmaxqty']);

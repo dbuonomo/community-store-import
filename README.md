@@ -37,10 +37,9 @@ pNoQty | | 1.x+
 pTaxable | | 1.x+
 pActive | | 1.x+
 pShippable | | 1.x+
+pCreateUserAccount | | 1.x+
+pAutoCheckout | | 1.x+
 pExclusive | | 1.x+
-pMaxQty | | 1.4.2+
-pQtyLabel | | 1.4.2+
-pAllowDecimalQty | | 1.4.2+
 pSalePrice | | 1.x+
 pPriceMaximum | | 1.x+
 pPriceMinimum | | 1.x+
@@ -51,7 +50,11 @@ pLength | | 1.x+
 pWidth | | 1.x+
 pHeight | | 1.x+
 pWeight | | 1.x+
+pNumberItems | | 1.x+
 pProductGroups | | 1.x+
+pMaxQty | | 1.4.2+
+pQtyLabel | | 1.4.2+
+pAllowDecimalQty | | 1.4.2+
 pQtySteps | | 1.4.2+
 pSeparateShip | | 1.4.2+
 pPackageData | | 1.4.2+
@@ -60,9 +63,6 @@ pPackageData | | 1.4.2+
 Column Name | Default | CS Version
 ----------- | ------- | ----------
 pTaxClass | 1 | 1.x+
-pNumberItems | null | 1.x+
-pCreateUserAccount | false | 1.x+
-pAutoCheckout | false | 1.x+
 pVariations | false | 1.x+
 pQuantityPrice | false | 1.x+
 pDateAdded | new DateTime() | 1.x+
