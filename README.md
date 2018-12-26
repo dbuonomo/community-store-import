@@ -22,29 +22,25 @@ Tested with the following versions of Community Store:
 ## Column Headings
 The first row of the CSV file must contain column headings as defined below. Columns headings that do not match any of the prescribed column names will be ignored.
 
-### Required
-Column Name | CS Version
------------ | ----------
-pName | 1.x+
-pCustomerPrice | 1.x+
-pFeatured | 1.x+
-pQty | 1.x+
-pNoQty | 1.x+
-pTaxable | 1.x+
-pActive | 1.x+
-pShippable | 1.x+
-pExclusive | 1.x+
-pMaxQty | 1.4.2+
-pQtyLabel | 1.4.2+
-pAllowDecimalQty | 1.4.2+
-
-### Optional
+### Supported
 Column Name | Default | CS Version
 ----------- | ------- | ----------
 pSKU | | 1.x+
+pName | | 1.x+
 pDesc | | 1.x+
 pDetail | | 1.x+
 pPrice | | 1.x+
+pCustomerPrice | | 1.x+
+pFeatured | | 1.x+
+pQty | | 1.x+
+pNoQty | | 1.x+
+pTaxable | | 1.x+
+pActive | | 1.x+
+pShippable | | 1.x+
+pExclusive | | 1.x+
+pMaxQty | | 1.4.2+
+pQtyLabel | | 1.4.2+
+pAllowDecimalQty | | 1.4.2+
 pSalePrice | | 1.x+
 pPriceMaximum | | 1.x+
 pPriceMinimum | | 1.x+
