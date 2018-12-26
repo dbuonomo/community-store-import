@@ -30,7 +30,6 @@ pName | | 1.x+
 pDesc | | 1.x+
 pDetail | | 1.x+
 pPrice | | 1.x+
-pCustomerPrice | | 1.x+
 pFeatured | | 1.x+
 pQty | | 1.x+
 pNoQty | | 1.x+
@@ -41,9 +40,6 @@ pCreateUserAccount | | 1.x+
 pAutoCheckout | | 1.x+
 pExclusive | | 1.x+
 pSalePrice | | 1.x+
-pPriceMaximum | | 1.x+
-pPriceMinimum | | 1.x+
-pPriceSuggestions | | 1.x+
 pQtyUnlim | | 1.x+
 pBackOrder | | 1.x+
 pLength | | 1.x+
@@ -52,6 +48,10 @@ pHeight | | 1.x+
 pWeight | | 1.x+
 pNumberItems | | 1.x+
 pProductGroups | | 1.x+
+pPriceMaximum | | 1.0.7+
+pPriceMinimum | | 1.0.7+
+pPriceSuggestions | | 1.0.7+
+pCustomerPrice | | 1.0.7+
 pMaxQty | | 1.4.2+
 pQtyLabel | | 1.4.2+
 pAllowDecimalQty | | 1.4.2+
