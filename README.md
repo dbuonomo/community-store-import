@@ -78,11 +78,11 @@ Note: Custom attributes will not be created during import. If a custom attribute
 Product groups can be specified by name in a column named pProductGroups. Separate each group name with a comma.  If the product group does not exist, it will be created. This field is optional.
 
 ## Roadmap
+* Use a queue to process data
 * Add a summary and confirmation before import
 * Add option to skip product updates
-* Interrogate database for non-null (required) fields
-* Allow image IDs to be specified for each product
-* Dispatch concrete5 events
+* Support image IDs in CSV data
 * Add support for Community Store 2.x
+* Dispatch concrete5 events
 * Test with older versions of Community Store
 

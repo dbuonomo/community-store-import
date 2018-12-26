@@ -108,19 +108,19 @@ class Import extends DashboardPageController
     {
         $data = array(
             'pSKU' => $row['psku'],
-            'pName' => $row['pname'],                       // not-null
+            'pName' => $row['pname'],
             'pDesc' => trim($row['pdesc']),
             'pDetail' => trim($row['pdetail']),
-            'pCustomerPrice' => $row['pcustomerprice'],     // not-null
-            'pFeatured' => $row['pfeatured'],               // not-null
-            'pQty' => $row['pqty'],                         // not-null
-            'pNoQty' => $row['pnoqty'],                     // not-null
-            'pTaxable' => $row['ptaxable'],                 // not-null
-            'pActive' => $row['pactive'],                   // not-null
-            'pShippable' => $row['pshippable'],             // not-null
-            'pCreateUserAccount' => $row['pcreateuseraccount'],      // not-null
-            'pAutoCheckout' => $row['pautocheckout'],       // not-null
-            'pExclusive' => $row['pexclusive'],             // not-null
+            'pCustomerPrice' => $row['pcustomerprice'],
+            'pFeatured' => $row['pfeatured'],
+            'pQty' => $row['pqty'],
+            'pNoQty' => $row['pnoqty'],
+            'pTaxable' => $row['ptaxable'],
+            'pActive' => $row['pactive'],
+            'pShippable' => $row['pshippable'],
+            'pCreateUserAccount' => $row['pcreateuseraccount'],
+            'pAutoCheckout' => $row['pautocheckout'],
+            'pExclusive' => $row['pexclusive'],
 
             'pPrice' => $row['pprice'],
             'pSalePrice' => $row['psaleprice'],
@@ -136,18 +136,18 @@ class Import extends DashboardPageController
             'pNumberItems' => $row['pnumberitems'],
 
             // CS v1.4.2+
-            'pMaxQty' => $row['pmaxqty'],                       // not-null
-            'pQtyLabel' => $row['pqtylabel'],                   // not-null
-            'pAllowDecimalQty' => $row['pallowdecimalqty'],     // not-null
+            'pMaxQty' => $row['pmaxqty'],
+            'pQtyLabel' => $row['pqtylabel'],
+            'pAllowDecimalQty' => $row['pallowdecimalqty'],
             'pQtySteps' => $row['pqtysteps'],
             'pSeperateShip' => $row['pseperateship'],
             'pPackageData' => $row['ppackagedata'],
 
             // Not supported in CSV data
-            'pfID' => Config::get('community_store_import.default_image'),  // not-null
-            'pVariations' => false,             // not-null
-            'pQuantityPrice' => false,          // not-null
-            'pTaxClass' => 1                    // 1 = default tax class
+            'pfID' => Config::get('community_store_import.default_image'),
+            'pVariations' => false,
+            'pQuantityPrice' => false,
+            'pTaxClass' => 1        // 1 = default tax class
         );
 
         // Save product
