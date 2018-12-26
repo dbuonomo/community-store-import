@@ -64,7 +64,7 @@ Column Name | Default | CS Version
 ----------- | ------- | ----------
 pTaxClass | 1 | 1.x+
 pVariations | false | 1.x+
-pQuantityPrice | false | 1.x+
+pQuantityPrice | false | 1.3+
 pDateAdded | new DateTime() | 1.x+
 
 [1] The default value is applied when the product is added.
