@@ -188,7 +188,7 @@ class Import extends DashboardPageController
         if ($row['pqty']) $p->setQty($row['pqty']);
         if ($row['pnoqty']) $p->setNoQty($row['pnoqty']);
         if ($row['ptaxable']) $p->setISTaxable($row['ptaxable']);
-        if ($row['pactive']) $p->setIsActive($row['pqctive']);
+        if ($row['pactive']) $p->setIsActive($row['pactive']);
         if ($row['pshippable']) $p->setIsShippable($row['pshippable']);
         if ($row['pcreateuseraccount']) $p->setCreatesUserAccount($row['pcreateuseraccount']);
         if ($row['pautocheckout']) $p->setAutoCheckout($row['pautocheckout']);
