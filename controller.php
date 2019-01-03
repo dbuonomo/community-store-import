@@ -58,8 +58,7 @@ class Controller extends Package
 
     private function setConfigValue($key, $value)
     {
-        $config = Config::get($key);
-        if (empty($config)) {
+        if (!Config::has($key)) {
             Config::save($key, $value);
         }
     }
