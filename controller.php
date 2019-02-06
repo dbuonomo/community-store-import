@@ -1,21 +1,22 @@
 <?php
 namespace Concrete\Package\CommunityStoreImport;
 
-use Concrete\Core\Package\Package;
-use Concrete\Core\Page\Single as SinglePage;
-use Config;
+use Package;
+use Route;
+use Asset;
+use AssetList;
+use URL;
+use Core;
 use Page;
-use Concrete\Core\Attribute\Type as AttributeType;
-use Concrete\Core\Attribute\Key\Category as AttributeKeyCategory;
-use Concrete\Core\Attribute\Set as AttributeSet;
-use Concrete\Core\Attribute\Key\UserKey as UserKey;
+use SinglePage;
+use Config;
 use Whoops\Exception\ErrorException;
 
 class Controller extends Package
 {
     protected $pkgHandle = 'community_store_import';
     protected $appVersionRequired = '5.7.1';
-    protected $pkgVersion = '0.9.3';
+    protected $pkgVersion = '0.10';
 
     public function getPackageDescription()
     {
