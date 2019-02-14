@@ -8,6 +8,7 @@ use Concrete\Core\File\File;
 use Log;
 use Exception;
 use Config;
+use Core;
 
 use Concrete\Package\CommunityStore\Src\CommunityStore\Product\ProductList;
 use Concrete\Package\CommunityStore\Src\CommunityStore\Product\Product;
@@ -23,7 +24,18 @@ class Import extends DashboardPageController
 
     public function view()
     {
+        $this->loadFormAssets();
         $this->set('pageTitle', t('Product Import'));
+    }
+
+    public function loadFormAssets()
+    {
+        $this->requireAsset('core/file-manager');
+        $this->requireAsset('core/sitemap');
+        $this->requireAsset('css', 'select2');
+        $this->requireAsset('javascript', 'select2');
+        $this->set('concrete_asset_library', Core::make('helper/concrete/asset_library'));
+        $this->set('form', Core::make('helper/form'));
     }
 
     public function run()
@@ -104,6 +116,43 @@ class Import extends DashboardPageController
         ini_set('max_input_time', $MAX_INPUT_TIME);
     }
 
+    private function setAttributes($product, $row)
+    {
+        // Product attributes
+        if (class_exists('\Concrete\Package\CommunityStore\Src\Attribute\Key\StoreProductKey')) {
+            foreach ($this->attributes as $attr) {
+                $ak = preg_replace('/^attr_/', '', $attr);
+                if (StoreProductKey::getByHandle($ak)) {
+                    $product->setAttribute($ak, $row[$attr]);
+                }
+            }
+        } elseif (class_exists('\Concrete\Package\CommunityStore\Attribute\Category\ProductCategory')) {
+            $productCategory = $this->app->make('Concrete\Package\CommunityStore\Attribute\Category\ProductCategory');
+            $aks = $productCategory->getList();
+            foreach ($aks as $uak) {
+                $product->setAttribute($uak, $row[$uak->getAttributeKeyHandle()]);
+            }
+        }
+    }
+
+    private function setGroups($product, $row) {
+        if ($row['pproductgroups']) {
+            $pGroupNames = explode(',', $row['pproductgroups']);
+            $pGroupIDs = array();
+            foreach ($pGroupNames as $pGroupName) {
+                $pgID = StoreGroup::getByName($pGroupName);
+                if (!$pgID instanceof StoreGroup) {
+                    $pgID = StoreGroup::add($pGroupName);
+                }
+                $pGroupIDs[] = $pgID;
+            }
+            $data['pProductGroups'] = $pGroupIDs;
+
+            // Update groups
+            ProductGroup::addGroupsForProduct($data, $product);
+        }
+    }
+
     private function add($row)
     {
         $data = array(
@@ -138,10 +187,14 @@ class Import extends DashboardPageController
             // CS v1.4.2+
             'pMaxQty' => $row['pmaxqty'],
             'pQtyLabel' => $row['pqtylabel'],
-            'pAllowDecimalQty' => $row['pallowdecimalqty'],
+            'pAllowDecimalQty' => (isset($row['pallowdecimalqty']) ? $row['pallowdecimalqty'] : false),
             'pQtySteps' => $row['pqtysteps'],
             'pSeperateShip' => $row['pseperateship'],
             'pPackageData' => $row['ppackagedata'],
+
+            // CS v2+
+            'pQtyLabel' => (isset($row['pqtylabel']) ? $row['pqtylabel'] : ''),
+            'pMaxQty' => (isset($row['pmaxqty']) ? $row['pmaxqty'] : 0),
 
             // Not supported in CSV data
             'pfID' => Config::get('community_store_import.default_image'),
@@ -154,23 +207,10 @@ class Import extends DashboardPageController
         $p = Product::saveProduct($data);
 
         // Add product attributes
-        foreach ($this->attributes as $attr) {
-            $ak = preg_replace('/^attr_/', '', $attr);
-            if (StoreProductKey::getByHandle($ak)) {
-                $p->setAttribute($ak, $row[$attr]);
-            }
-        }
+        $this->setAttributes($p, $row);
         
-        $pGroupNames = explode(',', $row['pproductgroups']);
-        $pGroupIDs = array();
-        foreach ($pGroupNames as $pGroupName) {
-            $pgID = StoreGroup::getByName($pGroupName);
-            if (!$pgID instanceof StoreGroup) {
-                $pgID = StoreGroup::add($pGroupName);
-            }
-            $pGroupIDs[] = $pgID;
-        }
-        $data['pProductGroups'] = $pGroupIDs;
+        // Add product groups
+        $this->setGroups($p, $row);
 
         // Add groups
         ProductGroup::addGroupsForProduct($data, $p);
@@ -215,30 +255,14 @@ class Import extends DashboardPageController
         if ($row['pseparateship']) $p->setSeparateShip($row['pseparateship']);
         if ($row['ppackagedata']) $p->setPackageData($row['ppackagedata']);
 
+        if (!$p->getImageId())
+            $p->setImageId(Config::get('community_store_import.default_image'));
+
         // Product attributes
-        foreach ($this->attributes as $attr) {
-            $ak = preg_replace('/^attr_/', '', $attr);
-            if (StoreProductKey::getByHandle($ak)) {
-                $p->setAttribute($ak, $row[$attr]);
-            }
-        }
+        $this->setAttributes($p, $row);
 
         // Product groups
-        if ($row['pproductgroups']) {
-            $pGroupNames = explode(',', $row['pproductgroups']);
-            $pGroupIDs = array();
-            foreach ($pGroupNames as $pGroupName) {
-                $pgID = StoreGroup::getByName($pGroupName);
-                if (!$pgID instanceof StoreGroup) {
-                    $pgID = StoreGroup::add($pGroupName);
-                }
-                $pGroupIDs[] = $pgID;
-            }
-            $data['pProductGroups'] = $pGroupIDs;
-
-            // Update groups
-            ProductGroup::addGroupsForProduct($data, $p);
-        }
+        $this->setGroups($p, $row);
 
         $p = $p->save();
 
