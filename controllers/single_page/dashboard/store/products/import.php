@@ -212,9 +212,6 @@ class Import extends DashboardPageController
         // Add product groups
         $this->setGroups($p, $row);
 
-        // Add groups
-        ProductGroup::addGroupsForProduct($data, $p);
-
         return $p;
     }
 
