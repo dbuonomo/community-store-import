@@ -118,7 +118,7 @@ class Import extends DashboardPageController
 
     private function setAttributes($product, $row)
     {
-        // Product attributes
+        // Community Store v1.x+
         if (class_exists('\Concrete\Package\CommunityStore\Src\Attribute\Key\StoreProductKey')) {
             foreach ($this->attributes as $attr) {
                 $ak = preg_replace('/^attr_/', '', $attr);
@@ -126,11 +126,12 @@ class Import extends DashboardPageController
                     $product->setAttribute($ak, $row[$attr]);
                 }
             }
+        // Community Store v2.0.5+
         } elseif (class_exists('\Concrete\Package\CommunityStore\Attribute\Category\ProductCategory')) {
             $productCategory = $this->app->make('Concrete\Package\CommunityStore\Attribute\Category\ProductCategory');
             $aks = $productCategory->getList();
-            foreach ($aks as $uak) {
-                $product->setAttribute($uak, $row[$uak->getAttributeKeyHandle()]);
+            foreach ($aks as $ak) {
+                $product->setAttribute($ak, $row['attr_'.$ak->getAttributeKeyHandle()]);
             }
         }
     }
