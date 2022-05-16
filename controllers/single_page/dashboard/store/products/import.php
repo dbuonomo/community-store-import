@@ -12,7 +12,7 @@ use Core;
 
 use Concrete\Package\CommunityStore\Src\CommunityStore\Product\ProductList;
 use Concrete\Package\CommunityStore\Src\CommunityStore\Product\Product;
-use Concrete\Package\CommunityStore\Src\Attribute\Key\StoreProductKey as StoreProductKey;
+use Concrete\Package\CommunityStore\Entity\Attribute\Key\StoreProductKey;
 use Concrete\Package\CommunityStore\Src\CommunityStore\Group\Group as StoreGroup;
 use Concrete\Package\CommunityStore\Src\CommunityStore\Product\ProductGroup;
 
@@ -150,6 +150,8 @@ class Import extends DashboardPageController
             $data['pProductGroups'] = $pGroupIDs;
 
             // Update groups
+            var_dump_safe($pGroupIDs);
+            exit;
             ProductGroup::addGroupsForProduct($data, $product);
         }
     }
