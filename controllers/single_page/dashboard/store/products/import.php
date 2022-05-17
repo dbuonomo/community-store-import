@@ -139,19 +139,17 @@ class Import extends DashboardPageController
     private function setGroups($product, $row) {
         if ($row['pproductgroups']) {
             $pGroupNames = explode(',', $row['pproductgroups']);
-            $pGroupIDs = array();
+            $pGroups = array();
             foreach ($pGroupNames as $pGroupName) {
-                $pgID = StoreGroup::getByName($pGroupName);
-                if (!$pgID instanceof StoreGroup) {
-                    $pgID = StoreGroup::add($pGroupName);
+                $storeGroup = StoreGroup::getByName($pGroupName);
+                if (! $storeGroup instanceof StoreGroup) {
+                    $storeGroup = StoreGroup::add($pGroupName);
                 }
-                $pGroupIDs[] = $pgID;
+                $pGroups[] = $storeGroup;
             }
-            $data['pProductGroups'] = $pGroupIDs;
+            $data['pProductGroups'] = $pGroups;
 
             // Update groups
-            var_dump_safe($pGroupIDs);
-            exit;
             ProductGroup::addGroupsForProduct($data, $product);
         }
     }
