@@ -82,7 +82,5 @@ Product groups can be specified by name in a column named pProductGroups. Separa
 * Add a summary and confirmation before import
 * Add option to skip product updates
 * Support image IDs in CSV data
-* Add support for Community Store 2.x
 * Dispatch concrete5 events
-* Test with older versions of Community Store
 
