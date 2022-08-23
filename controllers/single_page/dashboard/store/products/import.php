@@ -253,7 +253,7 @@ class Import extends DashboardPageController
         if ($row['pseparateship']) $p->setSeparateShip($row['pseparateship']);
         if ($row['ppackagedata']) $p->setPackageData($row['ppackagedata']);
 
-        if (!$p->getImageId())
+        if (! $p->getImageId())
             $p->setImageId(Config::get('community_store_import.default_image'));
 
         // Product attributes
